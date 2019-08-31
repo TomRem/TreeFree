@@ -18,10 +18,10 @@ class When extends Component {
                     leftContent={<div>starts on <span style={{ color: 'pink' }}> *</span></div>}
                     centerContent={
                         <div>
-                            <input id="date" type="date"></input><span className='letters'>at</span>
+                            <input id="date" name='startsOn' onChange={this.props.handleChange} type="date"></input><span className='letters'>at</span>
                             <input type="time" name="usr_time"></input>
-                            <input type="checkbox" name='first' onChange={this.chooseCheckbox} /><span className='letters'>AM</span>
-                            <input type="checkbox" name='second' onChange={this.chooseCheckbox} /><span className='letters'>PM</span>
+                            <input type="checkbox" name='am' onChange={this.chooseCheckbox} /><span className='letters'>AM</span>
+                            <input type="checkbox" name='pm' onChange={this.chooseCheckbox} /><span className='letters'>PM</span>
                         </div>}
                     rightContent={null}
                 />
@@ -29,7 +29,7 @@ class When extends Component {
                     leftContent={'duration'}
                     centerContent={
                         <>
-                            <input type="number" name="tentacles" min="10" max="100" placeholder='Number'></input><span className='letters'>hour</span>
+                            <input type="number" onChange={this.props.handleChange} name="duration" min="10" max="100" placeholder='Number'></input><span className='letters'>hour</span>
                         </>}
                     rightContent={null}
                 />

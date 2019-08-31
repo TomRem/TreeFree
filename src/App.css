@@ -1,3 +1,9 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
 .App {
   text-align: center;
   background-color: #F7F7F7;
@@ -91,11 +97,27 @@
   padding: 10px 0px 10px 10px;
 }
 
+
 .descriptionTextarea {
-  width: 100.5%;
+  width: 100%;
   height: 150px;
   padding: 10px 0px 10px 10px;
   resize: none;
+}
+
+.grayText {
+  width: 100%;
+  color: lightgray;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.alignleft {
+  float: left;
+}
+
+.alignright {
+  float: right;
 }
 
 select {
@@ -106,7 +128,7 @@ select {
   appearance: none;
   display: block;
   padding: 10px 0px 10px 10px;
-  width: 103.3%;
+  width: 100%;
   background-color: #345B96;
   background: url(arrow.png) no-repeat 96% center;
   background-size: 10px 10px;
@@ -154,7 +176,7 @@ input[type='time'] {
   padding: 10px 0px 10px 10px;
 }
 input[type='number'] {
-  width: 17%;
+  width: 24%;
   padding: 10px 15px;
 }
 

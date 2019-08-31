@@ -2,13 +2,20 @@ import React from 'react';
 import './App.css';
 import Header from './components/Header'
 import Event from './components/Event'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import EventSended from './components/EventSended'
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <Event />
-    </div>
+    <Router>
+      <div className="App">
+        <Header />
+        <Switch>
+          <Route path='/' exact component={Event} />
+          <Route path='/created' component={EventSended} />
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
