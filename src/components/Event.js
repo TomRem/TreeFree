@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import About from './About'
 import Coordinator from './Coordinator'
 import When from './When'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export class Event extends Component {
     state = {
@@ -27,6 +27,8 @@ export class Event extends Component {
 
         startsOn: '',
         duration: 0,
+
+        validation: false
     }
 
     setValues = (event) => {
@@ -38,6 +40,7 @@ export class Event extends Component {
             border: 'solid 2px pink',
             outline: 'none',
         }
+
         this.setState({
             [name]: value,
         })
@@ -71,9 +74,9 @@ export class Event extends Component {
                 }
                 break;
             case 'duration':
-               // if (this.state.duration >= 0) {
-                    this.setState({
-                    })
+                // if (this.state.duration >= 0) {
+                this.setState({
+                })
                 //}
                 break;
             default:
@@ -81,18 +84,57 @@ export class Event extends Component {
     }
 
     sendEvent = () => {
-        const eventToSend = {
-            title: this.state.title,
-            description: this.state.description,
-            payment: this.state.payment,
-            reward: this.state.reward,
-            category: this.state.category,
-            startsOn: this.state.startsOn,
-            duration: this.state.duration
+        if ((this.state.errorTitle === false && this.state.title !== '') &&
+            (this.state.errorDescription === false && this.state.description !== '') &&
+            (this.state.checked === 'first' || (this.state.checked === 'second' && this.state.payment > 0))) {
+            const eventToSend = {
+                title: this.state.title,
+                description: this.state.description,
+                category: this.state.category,
 
+                paid_event: this.state.checked === 'second' ? true : false, //nowe boolean
+                event_fee: this.state.payment,
+                reward: this.state.reward,
+
+                coordinator: {
+                    email: 'string',
+                    id: 'string',
+                },
+
+                startsOn: this.state.startsOn, // format: YYYY-MM-DDTHH:mm (example: 2018-01-19T15:15)
+                duration: this.state.duration,// in seconds
+            }
+            console.log('mozna wysylac wszystko gitarka', eventToSend)
+
+        } else {
+            console.log('cos jest nie tak ', this.state)
+            const style = {
+                border: 'solid 2px pink',
+                outline: 'none',
+            }
+
+            if (this.state.title === '') {
+                this.setState({
+                    errorTitle: true,
+                    titleStyle: style,
+                })
+            }
+            if (this.state.description === '') {
+                this.setState({
+                    errorDescription: true,
+                    descriptionStyle: style,
+                })
+            }
+
+            if (this.state.checked === 'second' && this.state.payment <= 0) {
+                this.setState({
+                    errorPayment: true,
+                    paymentStyle: style,
+                })
+            }
         }
-        console.log(eventToSend)
     }
+
 
     chooseCheckbox = (e) => {
         if (e.target.name === 'second') {
@@ -113,6 +155,17 @@ export class Event extends Component {
     }
 
     render() {
+        const styleLink = {
+            borderRadius: '3px',
+            backgroundColor: '#FF8B12',
+            color: 'white',
+            padding: '15px 32px',
+            textAlign: 'center',
+            textDecoration: 'none',
+            display: 'inline-block',
+            fontSize: '16px',
+            marginBottom: '40px',
+        }
         return (
             <>
                 <div className='Event'>
@@ -124,7 +177,11 @@ export class Event extends Component {
                 <div className='Event'>
                     <When handleChange={this.setValues} />
                 </div>
-                <Link onClick={this.sendEvent} to='/created'><button >PUBLISH EVENT</button></Link>
+                {((this.state.errorTitle === false && this.state.title !== '') &&
+                    (this.state.errorDescription === false && this.state.description !== '') &&
+                    (this.state.checked === 'first' || (this.state.checked === 'second' && this.state.payment > 0))) ?
+                    <Link style={styleLink} onClick={this.sendEvent} to='/created' >PUBLISH EVENT</Link> :
+                    <Link style={styleLink} onClick={this.sendEvent} to='/' >PUBLISH EVENT</Link>}
             </>
         )
     }

@@ -8,7 +8,7 @@ import EventSended from './components/EventSended'
 function App() {
   return (
     <Router>
-      <div className="App">
+      <div>
         <Header />
         <Switch>
           <Route path='/' exact component={Event} />

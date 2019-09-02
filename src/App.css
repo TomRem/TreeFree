@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-.App {
+body {
   text-align: center;
   background-color: #F7F7F7;
 }
@@ -37,6 +37,24 @@
   padding: 15px;
   background-color: white;
   text-align: left;
+}
+
+.EventSended {
+  -webkit-box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.1);
+  box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.1);
+  border-radius: 3px;
+  margin: 30px auto;
+  width: 800px;
+  padding: 30px;
+  background-color: #F0FCF3;
+  text-align: left;
+}
+
+.EventSended > h1 {
+  padding: 0px 0px 10px 0px;;
+  color: green;
+  font-weight: 200;
 }
 
 .FormTitle {
