@@ -186,11 +186,11 @@ input[type='checkbox']:checked:after {
 }
 
 input[type='date'] {
-  width: 33%;
+  width: 35%;
   padding: 10px 0px 10px 10px;
 }
 input[type='time'] {
-  width: 17%;
+  width: 35%;
   padding: 10px 0px 10px 10px;
 }
 input[type='number'] {

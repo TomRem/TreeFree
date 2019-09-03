@@ -6,7 +6,6 @@ import data from '../mocks/categories.json'
 import Topic from './Topic'
 
 function About(props) {
-    console.log(props.about)
     return (
         <div>
             <FormTitle text={'About'} />
@@ -31,12 +30,12 @@ function About(props) {
                             style={props.about.descriptionStyle}
                             name='description'
                             onChange={props.handleChange}
-                            maxLength="160"
+                            maxLength="140"
                             placeholder="Write about your event, be creative">
                         </textarea>
                         <div className='grayText' >
-                            <span className="alignleft">Max length 160 characters</span>
-                            <span className="alignright">{props.about.description.length}/160</span>
+                            <span className="alignleft">Max length 140 characters</span>
+                            <span className="alignright">{props.about.description.length}/140</span>
                         </div>
                         <div style={{ clear: 'both' }}></div>
                     </>}
@@ -48,7 +47,7 @@ function About(props) {
                     <div className='customSelect'>
                         <select className='categorySelect' required onChange={props.handleChange} name='category'>
                             <option value="" disabled selected hidden>Select category (skills, interests, locations)</option>
-                            {data.map((name) => <option key={name.id} value={name.name}>{name.name}</option>)}
+                            {data.map((name) => <option key={name.id} value={name.id}>{name.name}</option>)}
                         </select>
                         <div className='grayText' >Describes topic and people who should be interested in this event</div>
                     </div>}
@@ -69,7 +68,7 @@ function About(props) {
                     <>
                         <input className='feeNumber' onChange={props.handleChange} name='reward' min="0" type="number" value={props.reward} style={props.about.rewardStyle} placeholder="Number"></input><span className='letters'>reward points for attendance </span>
                     </>}
-                rightContent={<WarningMessage error={props.about.errorReward} text={'Reward cannot be less than one'} />}
+                rightContent={<WarningMessage error={props.about.errorReward} text={'Reward cannot be less than zero'} />}
             />
         </div>
     )

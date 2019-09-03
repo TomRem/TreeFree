@@ -14,7 +14,8 @@ export class Event extends Component {
         errorDescription: false,
         descriptionStyle: {},
 
-        category: '',
+        category: 0,
+
 
         checkboxStyle: { visibility: 'hidden' },
         checked: 'first',
@@ -25,8 +26,23 @@ export class Event extends Component {
         reward: 0,
         errorReward: false,
 
+        responsible: '3',
+        errorResponsible: false,
+        email: '',
+        errorEmail: false,
+        emailStyle: {},
+
         startsOn: '',
+        errorStartsOn: false,
+        startsOnStyle: {},
+
+        time: '',
+        errorTime: false,
+        timeStyle: {},
+
         duration: 0,
+        errorDuration: false,
+        durationStyle: {},
 
         validation: false
     }
@@ -35,12 +51,13 @@ export class Event extends Component {
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
         const name = event.target.name;
         const ifEmpty = value.length === 0;
-        const ifNumberEmpty = value <= 0;
+        const ifNumberEmptyOrZero = value <= 0;
+        const ifNumberEmpty = value < 0;
+        const ifNumberLessTen = value < 10;
         const style = {
             border: 'solid 2px pink',
             outline: 'none',
         }
-
         this.setState({
             [name]: value,
         })
@@ -60,8 +77,8 @@ export class Event extends Component {
             case 'payment':
                 if (this.state.checked === 'second' && this.state.payment >= 0) {
                     this.setState({
-                        errorPayment: ifNumberEmpty,
-                        paymentStyle: ifNumberEmpty ? style : {},
+                        errorPayment: ifNumberEmptyOrZero,
+                        paymentStyle: ifNumberEmptyOrZero ? style : {},
                     })
                 }
                 break;
@@ -74,19 +91,68 @@ export class Event extends Component {
                 }
                 break;
             case 'duration':
-                // if (this.state.duration >= 0) {
+                if (this.state.duration >= 10) {
+                    this.setState({
+                        errorDuration: ifNumberLessTen,
+                        durationStyle: ifNumberLessTen ? style : {},
+                    })
+                }
+                break;
+            case 'email':
+                if (!((this.state.email.indexOf('@') === -1) ||
+                    (this.state.email.indexOf(' ') !== -1) ||
+                    (this.state.email.indexOf('.') === -1))) {
+                    this.setState({
+                        emailStyle: {},
+                        errorEmail: false
+                    })
+                }
+                break;
+            case 'time':
                 this.setState({
+                    errorTime: ifEmpty,
+                    timeStyle: ifEmpty ? style : {},
                 })
-                //}
+                break;
+            case 'startsOn':
+                this.setState({
+                    errorStartsOn: ifEmpty,
+                    startsOnStyle: ifEmpty ? style : {},
+                })
                 break;
             default:
         }
     }
+    checkEmail = () => {
+        if (this.state.email !== '') {
+            const ifEmailWrong = ((this.state.email.indexOf('@') === -1) ||
+                (this.state.email.indexOf(' ') !== -1) ||
+                (this.state.email.indexOf('.') === -1));
+            const style = {
+                border: 'solid 2px pink',
+                outline: 'none',
+            }
+            this.setState({
+                errorEmail: ifEmailWrong,
+                emailStyle: ifEmailWrong ? style : {},
+            })
+
+        } else {
+            this.setState({
+                errorEmail: false,
+                emailStyle: {}
+            })
+        }
+    }
 
     sendEvent = () => {
-        if ((this.state.errorTitle === false && this.state.title !== '') &&
+        this.checkEmail();
+        if ((this.state.errorStartsOn === false && this.state.startsOn !== '') &&
+            (this.state.errorTime === false && this.state.time !== '') &&
+            (this.state.errorTitle === false && this.state.title !== '') &&
             (this.state.errorDescription === false && this.state.description !== '') &&
             (this.state.checked === 'first' || (this.state.checked === 'second' && this.state.payment > 0))) {
+
             const eventToSend = {
                 title: this.state.title,
                 description: this.state.description,
@@ -97,17 +163,15 @@ export class Event extends Component {
                 reward: this.state.reward,
 
                 coordinator: {
-                    email: 'string',
-                    id: 'string',
+                    email: this.state.email,
+                    id: this.state.responsible,
                 },
 
-                startsOn: this.state.startsOn, // format: YYYY-MM-DDTHH:mm (example: 2018-01-19T15:15)
+                startsOn: this.state.startsOn + 'T' + this.state.time, // format: YYYY-MM-DDTHH:mm (example: 2018-01-19T15:15)
                 duration: this.state.duration,// in seconds
             }
-            console.log('mozna wysylac wszystko gitarka', eventToSend)
-
+            console.log('Event wyslano', eventToSend);
         } else {
-            console.log('cos jest nie tak ', this.state)
             const style = {
                 border: 'solid 2px pink',
                 outline: 'none',
@@ -132,9 +196,22 @@ export class Event extends Component {
                     paymentStyle: style,
                 })
             }
+
+            if (this.state.time === '') {
+                this.setState({
+                    errorTime: true,
+                    timeStyle: style,
+                })
+            }
+
+            if (this.state.startsOn === '') {
+                this.setState({
+                    errorStartsOn: true,
+                    startsOnStyle: style,
+                })
+            }
         }
     }
-
 
     chooseCheckbox = (e) => {
         if (e.target.name === 'second') {
@@ -172,14 +249,16 @@ export class Event extends Component {
                     <About handleChange={this.setValues} about={this.state} chooseCheckbox={this.chooseCheckbox} />
                 </div>
                 <div className='Event'>
-                    <Coordinator />
+                    <Coordinator handleChange={this.setValues} coordinator={this.state} />
                 </div>
                 <div className='Event'>
-                    <When handleChange={this.setValues} />
+                    <When handleChange={this.setValues} when={this.state} />
                 </div>
-                {((this.state.errorTitle === false && this.state.title !== '') &&
+                {(this.state.errorStartsOn === false && this.state.startsOn !== '') &&
+                    (this.state.errorTime === false && this.state.time !== '') &&
+                    (this.state.errorTitle === false && this.state.title !== '') &&
                     (this.state.errorDescription === false && this.state.description !== '') &&
-                    (this.state.checked === 'first' || (this.state.checked === 'second' && this.state.payment > 0))) ?
+                    (this.state.checked === 'first' || (this.state.checked === 'second' && this.state.payment > 0)) ?
                     <Link style={styleLink} onClick={this.sendEvent} to='/created' >PUBLISH EVENT</Link> :
                     <Link style={styleLink} onClick={this.sendEvent} to='/' >PUBLISH EVENT</Link>}
             </>

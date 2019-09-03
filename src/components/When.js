@@ -1,41 +1,34 @@
-import React, { Component } from 'react'
 import FormTitle from './FormTitle'
 import Grid from './Grid'
+import React from 'react'
+import WarningMessage from './WarningMessage'
+import Topic from './Topic'
 
-class When extends Component {
-    state = {
-        checked: false,
-    }
-    chooseCheckbox = () => {
+function When(props) {
+    let error = props.when.errorTime || props.when.errorStartsOn;
+    return (
+        <div>
+            <FormTitle text={'When'} />
+            <Grid
+                leftContent={<Topic text={'start on'} error={error} required={true} />}
+                centerContent={
+                    <div>
+                        <input style={props.when.startsOnStyle} id="date" name='startsOn' onChange={props.handleChange} type="date"></input><span className='letters'>at</span>
+                        <input style={props.when.timeStyle} type="time" name="time" onChange={props.handleChange}></input>
+                    </div>}
+                rightContent={<WarningMessage error={error} text={'Start on cannot be empty'} />}
+            />
+            <Grid
+                leftContent={<Topic text={'duration'} error={props.when.errorDuration} required={false} />}
+                centerContent={
+                    <>
+                        <input type="number" style={props.when.durationStyle} onChange={props.handleChange} name="duration" min="10" placeholder='Number'></input><span className='letters'>hour</span>
+                    </>}
+                rightContent={<WarningMessage error={props.when.errorDuration} text={'Duration cannot be less than ten'} />}
+            />
+        </div >
 
-    }
-
-    render() {
-        return (
-            <div>
-                <FormTitle text={'When'} />
-                <Grid
-                    leftContent={<div>starts on <span style={{ color: 'pink' }}> *</span></div>}
-                    centerContent={
-                        <div>
-                            <input id="date" name='startsOn' onChange={this.props.handleChange} type="date"></input><span className='letters'>at</span>
-                            <input type="time" name="usr_time"></input>
-                            <input type="checkbox" name='am' onChange={this.chooseCheckbox} /><span className='letters'>AM</span>
-                            <input type="checkbox" name='pm' onChange={this.chooseCheckbox} /><span className='letters'>PM</span>
-                        </div>}
-                    rightContent={null}
-                />
-                <Grid
-                    leftContent={'duration'}
-                    centerContent={
-                        <>
-                            <input type="number" onChange={this.props.handleChange} name="duration" min="10" max="100" placeholder='Number'></input><span className='letters'>hour</span>
-                        </>}
-                    rightContent={null}
-                />
-            </div >
-        )
-    }
+    )
 }
 
 export default When
